@@ -9,7 +9,11 @@ import {
   Building
 } from 'lucide-react';
 
-function RightSideBar() {
+interface RightSideBarProps {
+  onTopicClick?: (topic: string) => void;
+}
+
+function RightSideBar({ onTopicClick }: RightSideBarProps) {
   return (
     <div className="lg:col-span-1">
             <Card className="p-4 shadow-card bg-gradient-card">
@@ -42,10 +46,10 @@ function RightSideBar() {
             <Card className="p-4 mt-4 shadow-card bg-gradient-card">
               <h4 className="font-semibold mb-4">Trending in Tech</h4>
               <div className="space-y-3">
-                <TrendingTopic topic="Artificial Intelligence" posts="2,341 posts" />
-                <TrendingTopic topic="Remote Work" posts="1,847 posts" />
-                <TrendingTopic topic="Sustainability" posts="892 posts" />
-                <TrendingTopic topic="Web3" posts="1,205 posts" />
+                <TrendingTopic topic="Artificial Intelligence" onClick={onTopicClick} />
+                <TrendingTopic topic="Remote Work" onClick={onTopicClick} />
+                <TrendingTopic topic="Sustainability" onClick={onTopicClick} />
+                <TrendingTopic topic="Web3" onClick={onTopicClick} />
               </div>
             </Card>
           </div>
@@ -75,13 +79,15 @@ const SuggestedConnection: React.FC<SuggestedConnectionProps> = ({ name, title, 
 
 interface TrendingTopicProps {
   topic: string;
-  posts: string;
+  onClick?: (topic: string) => void;
 }
 
-const TrendingTopic: React.FC<TrendingTopicProps> = ({ topic, posts }) => (
-  <div className="cursor-pointer hover:bg-accent p-2 rounded-lg transition-smooth">
+const TrendingTopic: React.FC<TrendingTopicProps> = ({ topic, onClick }) => (
+  <div
+    className="cursor-pointer hover:bg-accent p-2 rounded-lg transition-smooth border "
+    onClick={() => onClick && onClick(topic)}
+  >
     <h5 className="font-medium text-sm">{topic}</h5>
-    <p className="text-xs text-muted-foreground">{posts}</p>
   </div>
 );
 

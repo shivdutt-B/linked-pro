@@ -10,11 +10,15 @@ import {
   Smile,
   X
 } from 'lucide-react';
+import { useCreatePost } from '@/hooks/post/useCreatePost';
+import { useSelector } from 'react-redux';
 
-const CreatePost = () => {
+const CreatePost = ({ onPostCreated }: { onPostCreated?: () => void }) => {
+  const { userInfo } = useSelector((state: any) => state.user);
   const [postContent, setPostContent] = useState('');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const { createPost, loading } = useCreatePost();
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -27,21 +31,21 @@ const CreatePost = () => {
     }
   };
 
-  const handlePost = () => {
+  const handlePost = async () => {
     if (postContent.trim()) {
-      // Here you would handle the post submission
-      console.log('Posting:', { content: postContent, image: selectedImage });
+      await createPost(postContent); // Only text for now
       setPostContent('');
       setSelectedImage(null);
       setIsExpanded(false);
+      if (onPostCreated) onPostCreated();
     }
   };
 
   const postOptions = [
-    { icon: ImageIcon, label: 'Photo', color: 'text-blue-600', action: () => document.getElementById('image-upload')?.click() },
-    { icon: Video, label: 'Video', color: 'text-green-600' },
-    { icon: FileText, label: 'Article', color: 'text-orange-600' },
-    { icon: Calendar, label: 'Event', color: 'text-purple-600' },
+    // { icon: ImageIcon, label: 'Photo', color: 'text-blue-600', action: () => document.getElementById('image-upload')?.click() },
+    // { icon: Video, label: 'Video', color: 'text-green-600' },
+    // { icon: FileText, label: 'Article', color: 'text-orange-600' },
+    // { icon: Calendar, label: 'Event', color: 'text-purple-600' },
   ];
 
   return (
@@ -49,7 +53,10 @@ const CreatePost = () => {
       {/* Profile and Input */}
       <div className="flex items-start space-x-3">
         <div className="w-12 h-12 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold">
-          J
+          {
+            userInfo &&
+            userInfo.name.charAt(0).toUpperCase()
+          }
         </div>
         <div className="flex-1">
           <Textarea
@@ -113,8 +120,8 @@ const CreatePost = () => {
                 size="sm"
                 className="flex items-center space-x-2 hover:bg-accent text-yellow-600"
               >
-                <Smile className="w-4 h-4" />
-                <span className="hidden sm:inline">Feeling</span>
+                {/* <Smile className="w-4 h-4" />
+                <span className="hidden sm:inline">Feeling</span> */}
               </Button>
             </div>
             
@@ -133,10 +140,10 @@ const CreatePost = () => {
               <Button
                 variant="professional"
                 size="sm"
-                disabled={!postContent.trim()}
+                disabled={!postContent.trim() || loading}
                 onClick={handlePost}
               >
-                Post
+                {loading ? 'Posting...' : 'Post'}
               </Button>
             </div>
           </div>

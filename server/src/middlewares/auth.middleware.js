@@ -8,9 +8,11 @@ const prisma = new PrismaClient();
  */
 const authMiddleware = async (req, res, next) => {
   try {
+    console.log("Auth middleware triggered");
     // Get token from header
     const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1]; 
+    console.log("Token received:", token);
 
     // Check if no token
     if (!token) {
@@ -20,7 +22,9 @@ const authMiddleware = async (req, res, next) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, "your_jwt_secret");
+
+    console.log("Decoded token:", decoded);
 
     // Add user to request
     const user = await prisma.user.findUnique({
