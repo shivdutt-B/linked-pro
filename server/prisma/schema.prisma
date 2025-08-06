@@ -1,0 +1,110 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String  @id @default(uuid())
+  name         String
+  email        String  @unique
+  passwordHash String
+  about        String?
+  displayPic   String?
+  coverPhoto   String?
+  location     String?
+
+  // Skills
+  skills Skill[]
+
+  // Self-relation for connections (many-to-many)
+  connections User[] @relation("UserConnections")
+  connectedTo User[] @relation("UserConnections")
+
+  // One-to-many
+  educations  Education[]
+  experiences Experience[]
+  posts       Post[]
+  comments    Comment[]
+
+  // Saved posts (many-to-many)
+  savedPosts Post[] @relation("UserSavedPosts")
+
+  // Liked posts (many-to-many)
+  likedPosts Post[] @relation("UserLikedPosts")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Experience {
+  id       String    @id @default(uuid())
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  title    String
+  org      String
+  fromDate DateTime
+  toDate   DateTime?
+}
+
+model Education {
+  id     String @id @default(uuid())
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  school String
+  title  String
+  year   Int
+}
+
+model Post {
+  id      String  @id @default(uuid())
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId  String
+  content String?
+
+  // One-to-many relation with Media
+  media Media[]
+
+  comments Comment[]
+
+  // Inverse of likedPosts
+  likedBy User[] @relation("UserLikedPosts")
+
+  // Inverse of savedPosts
+  savedBy User[] @relation("UserSavedPosts")
+
+  createdAt DateTime @default(now())
+}
+
+model Media {
+  id       String  @id @default(uuid())
+  post     Post    @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId   String
+  url      String // S3 media link
+  type     String? // e.g., 'image', 'video', 'document'
+  filename String?
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  post      Post     @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Skill {
+  id     String @id @default(uuid())
+  name   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+}
