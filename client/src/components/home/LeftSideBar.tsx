@@ -6,10 +6,13 @@ import {
   TrendingUp, 
   Users,
   Eye,
-  Building
+  Building,
+  Loader2
 } from 'lucide-react';
+import { useSelector } from 'react-redux';
 
 function LeftSideBar() {
+  const { loading, userInfo } = useSelector((state: any) => state.user);
   return (
     <>
     {/* Left Sidebar */}
@@ -24,16 +27,29 @@ function LeftSideBar() {
                     </div>
                   </div>
                 </div>
-                <h3 className="mt-2 font-semibold text-foreground">John Doe</h3>
-                <p className="text-sm text-muted-foreground">Full Stack Developer</p>
+                <h3 className="mt-2 font-semibold text-foreground">{
+                  loading ?
+                    <Loader2 className="animate-spin inline-block w-4 h-4 mr-1" />
+                    :
+                    userInfo.name
+                  }</h3>
+                {/* <p className="text-sm text-muted-foreground">Full Stack Developer</p> */}
                 <div className="mt-4 pt-4 border-t border-border">
-                  <div className="flex justify-between text-sm">
+                  {/* <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Profile views</span>
                     <span className="text-primary font-semibold">142</span>
-                  </div>
+                  </div> */}
                   <div className="flex justify-between text-sm mt-2">
                     <span className="text-muted-foreground">Connections</span>
-                    <span className="text-primary font-semibold">1,234</span>
+                    <span className="text-primary font-semibold">
+                      {loading ? 
+                        <>
+                          <Loader2 className="animate-spin inline-block w-4 h-4 mr-1" />
+                        </> 
+                        : 
+                        userInfo ? userInfo.numberOfConnections : 0
+                      }
+                      </span>
                   </div>
                 </div>
                 <Button variant="outline" size="sm" className="w-full mt-4">
