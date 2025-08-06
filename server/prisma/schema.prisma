@@ -20,6 +20,7 @@ model User {
   displayPic   String?
   coverPhoto   String?
   location     String?
+  header      String?
 
   // Skills
   skills Skill[]

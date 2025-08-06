@@ -16,9 +16,11 @@ import {
   Heart,
   Bookmark
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
   const [isFollowing, setIsFollowing] = useState(false);
+  const { user } = useSelector((state: any) => state.profile);
 
   return (
     <div className="min-h-screen bg-background">
@@ -57,7 +59,7 @@ const Profile = () => {
                   <div className="absolute -top-20 left-6">
                     <Avatar className="h-32 w-32 border-4 border-background">
                       <AvatarImage src="/lovable-uploads/279df4c1-4a67-48cb-88d2-ee7e85bce433.png" />
-                      <AvatarFallback className="text-2xl">SB</AvatarFallback>
+                      <AvatarFallback className="text-2xl">{user ? user.name : ""}</AvatarFallback>
                     </Avatar>
                     <Button
                       variant="ghost"

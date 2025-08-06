@@ -5,6 +5,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv'); 
 const authRoutes = require('./src/routes/auth/auth.routes');
+const profileRoutes = require('./src/routes/profile/profile.routes');
 
 // Load environment variables
 dotenv.config();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/profile', profileRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

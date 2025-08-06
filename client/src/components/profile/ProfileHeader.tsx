@@ -16,9 +16,11 @@ import {
   Heart,
   Bookmark
 } from "lucide-react";
+import { useSelector } from "react-redux";
 
 
 function ProfileHeader() {
+  const { user } = useSelector((state: any) => state.profile);
   return (
     <Card>
               <div className="relative">
@@ -39,7 +41,8 @@ function ProfileHeader() {
                   <div className="absolute -top-20 left-6">
                     <Avatar className="h-32 w-32 border-4 border-background">
                       <AvatarImage src="/lovable-uploads/279df4c1-4a67-48cb-88d2-ee7e85bce433.png" />
-                      <AvatarFallback className="text-2xl">SB</AvatarFallback>
+                      <AvatarFallback className="text-2xl">
+                          {user ? user.name.slice(0,2) : ""}</AvatarFallback>
                     </Avatar>
                     <Button
                       variant="ghost"
@@ -67,22 +70,27 @@ function ProfileHeader() {
                   {/* Profile Details */}
                   <div className="mt-16 space-y-4">
                     <div>
-                      <h1 className="text-3xl font-bold">Shivdutt Bhadakwad</h1>
+                      <h1 className="text-3xl font-bold">{
+                        user ? user.name : ""
+                        }</h1>
                       <p className="text-xl text-muted-foreground mt-1">
-                        Full Stack Developer | MERN | DevOps | BE Computer Engineering 3rd Yr
+                        {
+                          user ? user.header : "--"
+                        }
                       </p>
                       <div className="flex items-center text-muted-foreground mt-2">
                         <MapPin className="h-4 w-4 mr-1" />
-                        <span>Maharashtra, India</span>
+                        <span>{user ? user.location : "--"}</span>
                       </div>
                       <div className="flex items-center mt-2">
                         <Users className="h-4 w-4 mr-2" />
-                        <span className="text-primary font-medium">241 connections</span>
+                        <span className="text-primary font-medium">
+                          {user ? user.connections.length:""} connections</span>
                       </div>
                     </div>
 
                     {/* Open to Work */}
-                    <Card className="bg-blue-50 border-blue-200">
+                    {/* <Card className="bg-blue-50 border-blue-200">
                       <CardContent className="p-4">
                         <div className="flex items-start space-x-3">
                           <div className="flex-1">
@@ -99,7 +107,7 @@ function ProfileHeader() {
                           </Button>
                         </div>
                       </CardContent>
-                    </Card>
+                    </Card> */}
                   </div>
                 </CardContent>
               </div>
