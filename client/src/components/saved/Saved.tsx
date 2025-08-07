@@ -32,13 +32,6 @@ const Saved = () => {
           posts.map((post: any) => (
             <div key={post.id} className="relative">
               <PostCard post={post} />
-              <button
-                className="absolute top-2 right-2 text-xs text-red-500 underline"
-                onClick={() => unsavePost(post.id)}
-                disabled={unsaveLoading}
-              >
-                {unsaveLoading ? 'Unsaving...' : 'Unsave'}
-              </button>
             </div>
           ))
         ) : (
