@@ -42,7 +42,7 @@ const ProfilePostCard: React.FC<ProfilePostCardProps> = ({ post, onDelete }) => 
           </Dialog>
         )}
       </div>
-      <div className="mb-3 text-foreground text-base leading-relaxed">{post.content}</div>
+      <div className="mb-3 text-foreground text-base leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : post.content}</div>
       <div className="flex items-center gap-6 text-sm text-muted-foreground border-t pt-2">
         <div className="flex items-center gap-1">
           <ThumbsUp className="w-4 h-4" />

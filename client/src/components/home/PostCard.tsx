@@ -63,6 +63,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
     navigate(`/profile/${post.userId}`);
   };
 
+  const handleCommentAdded = (newCount: number) => {
+    setCommentCount(newCount);
+  };
+
   return (
     <Card className="p-0 shadow-card hover:shadow-card-hover transition-smooth bg-gradient-card">
       {/* Post Header */}
@@ -93,7 +97,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
       </div>
       {/* Post Content */}
       <div className="px-4 pb-3">
-        <p className="text-foreground leading-relaxed">{post.content}</p>
+        <p className="text-foreground leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : post.content}</p>
       </div>
       {/* Engagement Stats */}
       <div className="px-4 py-2 border-t border-border">
@@ -161,7 +165,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
         </div>
       </div>
       {/* Comments Section */}
-      {showComments && <Comments postId={post.id} onCommentAdded={setCommentCount} initialCount={commentCount} />}
+      {showComments && <Comments postId={post.id} onCommentAdded={handleCommentAdded} initialCount={commentCount} />}
     </Card>
   );
 };

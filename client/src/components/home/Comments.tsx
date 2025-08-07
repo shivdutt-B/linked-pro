@@ -27,6 +27,7 @@ const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, on
     if (!commentText.trim()) return;
     await commentPost(postId, commentText);
     setCommentText('');
+    if (onCommentAdded) onCommentAdded(comments.length + 1);
     fetchComments();
   };
 
