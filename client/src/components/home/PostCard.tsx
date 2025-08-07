@@ -27,6 +27,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
   const [showReactions, setShowReactions] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentCount, setCommentCount] = useState(post.comments?.length || 0);
+  const [likeCount, setLikeCount] = useState(post.likedBy?.length || 0);
   const { likePost } = useLikePost();
   const { savePost } = useSavePost();
   const { unlikePost } = useUnlikePost();
@@ -40,8 +41,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
     if (!isSignedIn) return;
     if (isLiked) {
       await unlikePost(post.id);
+      setLikeCount((prev) => Math.max(prev - 1, 0));
     } else {
       await likePost(post.id);
+      setLikeCount((prev) => prev + 1);
     }
     setIsLiked((prev) => !prev);
   };
@@ -104,7 +107,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
                 <Heart className="w-2 h-2 text-white" />
               </div>
             </div>
-            <span>{post.likedBy?.length || 0} reactions</span>
+            <span>{likeCount} reactions</span>
           </div>
           <div className="flex items-center space-x-4">
             <span>{commentCount} comments</span>
