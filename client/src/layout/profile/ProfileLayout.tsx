@@ -11,7 +11,7 @@ import Post from "@/components/profile/Post";
 function ProfileLayout() {
   return (
         <>
-        <Navigation />
+        {/* <Navigation /> */}
         <div className="max-w-4xl mx-auto px-4 py-6 flex flex-col gap-6">
         <ProfileHeader />
         <About />

@@ -6,7 +6,8 @@ const cors = require('cors');
 const dotenv = require('dotenv'); 
 const authRoutes = require('./src/routes/auth/auth.routes');
 const profileRoutes = require('./src/routes/profile/profile.routes');
-const postRoutes = require('./src/routes/post/post.routes')
+const postRoutes = require('./src/routes/post/post.routes');
+const connectionsRoutes = require('./src/routes/connections/connections.routes');
 // Load environment variables
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/api/auth', authRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/connections', connectionsRoutes);
 
 // Health check route
 app.get('/health', (req, res) => {

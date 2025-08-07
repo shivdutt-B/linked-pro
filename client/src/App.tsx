@@ -8,28 +8,36 @@ import NotFound from "./pages/NotFound";
 import HomePage from "./pages/home/HomePage";
 import AuthPage from "./pages/auth/AuthPage";
 import ProfilePage from "./pages/profile/ProfilePage";
+import NetworkPage from "./pages/network/NetworkPage";
 import { useFetchUser } from "./hooks/auth/useFetchUser";
+import Navigation from "./components/nav/Navigation";
+import SavedPosts from "./components/saved/SavedPosts";
+import Saved from "./components/saved/Saved";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  useFetchUser(), // Custom hook to fetch user data on app load
+const App = () => {
+  useFetchUser();
 
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/auth" element={<AuthPage />} />
-          <Route path="/profile/*" element={<ProfilePage />} />
-          
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Navigation />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/auth" element={<AuthPage />} />
+            <Route path="/profile/*" element={<ProfilePage />} />
+            <Route path="/network" element={<NetworkPage />} />
+            <Route path="/saved" element={<Saved />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;

@@ -41,6 +41,10 @@ model User {
   // Liked posts (many-to-many)
   likedPosts Post[] @relation("UserLikedPosts")
 
+  // Connection requests - inverse relations
+  sentRequests     ConnectionRequest[] @relation("RequestFrom")
+  receivedRequests ConnectionRequest[] @relation("RequestTo")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -108,4 +112,14 @@ model Skill {
   name   String
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId String
+}
+
+model ConnectionRequest {
+  id        String   @id @default(uuid())
+  from      User     @relation("RequestFrom", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId    String
+  to        User     @relation("RequestTo", fields: [toId], references: [id], onDelete: Cascade)
+  toId      String
+  status    String   // 'pending', 'accepted', 'rejected'
+  createdAt DateTime @default(now())
 }

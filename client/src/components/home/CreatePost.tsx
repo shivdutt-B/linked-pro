@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useCreatePost } from '@/hooks/post/useCreatePost';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const CreatePost = ({ onPostCreated }: { onPostCreated?: () => void }) => {
   const { userInfo } = useSelector((state: any) => state.user);
@@ -47,6 +48,23 @@ const CreatePost = ({ onPostCreated }: { onPostCreated?: () => void }) => {
     // { icon: FileText, label: 'Article', color: 'text-orange-600' },
     // { icon: Calendar, label: 'Event', color: 'text-purple-600' },
   ];
+
+  if (!userInfo) {
+    return (
+      <Card className="p-4 shadow-card bg-gradient-card text-center">
+        <div className="text-muted-foreground">
+          <Link
+            to="/auth"
+            className="text-blue-600 hover:underline"
+            >
+              Sign in 
+            </Link>
+            { " " }
+           to create a post.
+          </div>
+      </Card>
+    );
+  }
 
   return (
     <Card className="p-4 shadow-card bg-gradient-card">

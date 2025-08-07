@@ -6,6 +6,7 @@ const { editAbout } = require('../../controllers/profile/editAbout.controller');
 const { editEducation, addEducation } = require('../../controllers/profile/editEducation.controller');
 const { editExperience, addExperience } = require('../../controllers/profile/editExperience.controller');
 const { editSkill, addSkill } = require('../../controllers/profile/editSkill.controller');
+const { suggestedUsers } = require('../../controllers/profile/suggestedUsers.controller');
 
 // GET /api/profile/:userId
 router.get('/:userId', getUserProfile);
@@ -24,5 +25,8 @@ router.post('/experience/:userId', authMiddleware, addExperience);
 // Skill
 router.put('/skill/:userId', authMiddleware, editSkill);
 router.post('/skill/:userId', authMiddleware, addSkill);
+
+// Suggested users
+router.get('/suggested', authMiddleware, suggestedUsers);
 
 module.exports = router;

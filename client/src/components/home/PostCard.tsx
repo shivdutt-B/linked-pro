@@ -4,8 +4,11 @@ import { Card } from '../ui/card';
 import { Heart, MessageCircle, Share2, Bookmark, MoreHorizontal, ThumbsUp, Smile } from 'lucide-react';
 import { useLikePost } from '@/hooks/post/useLikePost';
 import { useSavePost } from '@/hooks/post/useSavePost';
+import { useUnlikePost } from '@/hooks/post/useUnlikePost';
+import { useUnsavePost } from '@/hooks/post/useUnsavePost';
 import { useNavigate } from 'react-router-dom';
 import Comments from './Comments';
+import { useSelector } from 'react-redux';
 
 interface PostCardProps {
   post: any;
@@ -13,22 +16,43 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
-  const [isLiked, setIsLiked] = useState(post.likedBy?.length > 0);
-  const [isBookmarked, setIsBookmarked] = useState(post.savedBy?.length > 0);
+  const userInfo = useSelector((state: any) => state.user.userInfo);
+  const userId = userInfo?.id || userInfo?._id;
+  const [isLiked, setIsLiked] = useState(
+    userId ? post.likedBy?.some((u: any) => u.id === userId) : false
+  );
+  const [isBookmarked, setIsBookmarked] = useState(
+    userId ? post.savedBy?.some((u: any) => u.id === userId) : false
+  );
   const [showReactions, setShowReactions] = useState(false);
   const [showComments, setShowComments] = useState(false);
   const [commentCount, setCommentCount] = useState(post.comments?.length || 0);
   const { likePost } = useLikePost();
   const { savePost } = useSavePost();
+  const { unlikePost } = useUnlikePost();
+  const { unsavePost } = useUnsavePost();
   const navigate = useNavigate();
 
+  // Only allow like, save, comment if user is signed in
+  const isSignedIn = !!userInfo;
+
   const handleLike = async () => {
-    await likePost(post.id);
+    if (!isSignedIn) return;
+    if (isLiked) {
+      await unlikePost(post.id);
+    } else {
+      await likePost(post.id);
+    }
     setIsLiked((prev) => !prev);
   };
 
   const handleSave = async () => {
-    await savePost(post.id);
+    if (!isSignedIn) return;
+    if (isBookmarked) {
+      await unsavePost(post.id);
+    } else {
+      await savePost(post.id);
+    }
     setIsBookmarked((prev) => !prev);
   };
 
@@ -99,6 +123,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
               onClick={handleLike}
               onMouseEnter={() => setShowReactions(true)}
               onMouseLeave={() => setShowReactions(false)}
+              disabled={!isSignedIn}
             >
               <ThumbsUp className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
               <span>Like</span>
@@ -126,6 +151,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
             size="icon"
             className={`hover:bg-blue-50 hover:text-blue-600 ${isBookmarked ? 'text-blue-600' : ''}`}
             onClick={handleSave}
+            disabled={!isSignedIn}
           >
             <Bookmark className={`w-4 h-4 ${isBookmarked ? 'fill-current' : ''}`} />
           </Button>

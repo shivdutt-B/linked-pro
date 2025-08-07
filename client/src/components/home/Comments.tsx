@@ -3,11 +3,14 @@ import { useFetchComments } from '@/hooks/post/useFetchComments';
 import { useCommentPost } from '@/hooks/post/useCommentPost';
 import { Button } from '../ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from '../ui/avatar';
+import { useSelector } from 'react-redux';
 
 const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, onCommentAdded?: (count: number) => void, initialCount?: number }) => {
   const { comments, loading, error, fetchComments } = useFetchComments(postId);
   const { commentPost, loading: commentLoading } = useCommentPost();
   const [commentText, setCommentText] = useState('');
+  const userInfo = useSelector((state: any) => state.user.userInfo);
+  const isSignedIn = !!userInfo;
 
   useEffect(() => {
     fetchComments();
@@ -20,6 +23,7 @@ const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, on
   }, [comments.length]);
 
   const handleComment = async () => {
+    if (!isSignedIn) return;
     if (!commentText.trim()) return;
     await commentPost(postId, commentText);
     setCommentText('');
@@ -28,18 +32,23 @@ const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, on
 
   return (
     <div className="mt-2">
-      <div className="mb-2 flex gap-2 p-2">
-        <input
-          className="flex-1 border rounded p-2 text-sm"
-          placeholder="Write a comment..."
-          value={commentText}
-          onChange={e => setCommentText(e.target.value)}
-          disabled={commentLoading}
-        />
-        <Button onClick={handleComment} disabled={commentLoading || !commentText.trim()} size="sm">
-          {commentLoading ? '...' : 'Post'}
-        </Button>
-      </div>
+      {isSignedIn && (
+        <div className="mb-2 flex gap-2 p-2">
+          <input
+            className="flex-1 border rounded p-2 text-sm"
+            placeholder="Write a comment..."
+            value={commentText}
+            onChange={e => setCommentText(e.target.value)}
+            disabled={commentLoading}
+          />
+          <Button onClick={handleComment} disabled={commentLoading || !commentText.trim()} size="sm">
+            {commentLoading ? '...' : 'Post'}
+          </Button>
+        </div>
+      )}
+      {/* {!isSignedIn && (
+        <div className="text-xs text-muted-foreground mb-2 p-2">Sign in to comment.</div>
+      )} */}
       {loading ? (
         <div className="text-xs text-muted-foreground">Loading comments...</div>
       ) : error ? (
@@ -62,7 +71,7 @@ const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, on
               </div>
             </div>
           ))}
-          {comments.length === 0 && <div className="text-sm text-muted-foreground p-2">No comments yet.</div>}
+          {comments.length === 0 && <div className="text-sm text-muted-foreground p-2 text-center">No comments yet.</div>}
         </div>
       )}
     </div>

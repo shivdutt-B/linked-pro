@@ -23,9 +23,19 @@ exports.getUserProfile = async (req, res) => {
         connectedTo: true,
       },
     });
+    // Calculate total accepted connections (bidirectional)
+    const connectionsCount = await prisma.connectionRequest.count({
+      where: {
+        OR: [
+          { fromId: userId },
+          { toId: userId }
+        ],
+        status: 'accepted'
+      }
+    });
     console.log("getUserProfile controller called", user);
     if (!user) return res.status(404).json({ error: 'User not found' });
-    res.json(user);
+    res.json({ ...user, numberOfConnections: connectionsCount });
   } catch (err) {
     res.status(500).json({ error: 'Server error' });
   }

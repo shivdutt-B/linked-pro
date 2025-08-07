@@ -30,8 +30,18 @@ exports.Me = async (req, res) => {
         createdAt: true,
         about: true,
         location: true,
-        connections: { select: { id: true } },
       },
+    });
+
+    // Get accepted connections count (bidirectional)
+    const connectionsCount = await prisma.connectionRequest.count({
+      where: {
+        OR: [
+          { fromId: user.id },
+          { toId: user.id }
+        ],
+        status: 'accepted'
+      }
     });
 
     if (!user) {
@@ -47,7 +57,7 @@ exports.Me = async (req, res) => {
         createdAt: user.createdAt,
         about: user.about,
         location: user.location,
-        numberOfConnections: user.connections.length,
+        numberOfConnections: connectionsCount,
       },
     });
   } catch (err) {

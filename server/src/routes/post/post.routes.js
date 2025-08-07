@@ -9,6 +9,9 @@ const { likePost } = require('../../controllers/post/likePost.controller');
 const { commentPost } = require('../../controllers/post/commentPost.controller');
 const { savePost } = require('../../controllers/post/savePost.controller');
 const { getComments } = require('../../controllers/post/getComments.controller');
+const { getSavedPosts } = require('../../controllers/post/getSavedPosts.controller');
+const { unlikePost } = require('../../controllers/post/unlikePost.controller');
+const { unsavePost } = require('../../controllers/post/unsavePost.controller');
 
 // Feed (paginated)
 router.get('/feed', getFeed);
@@ -20,11 +23,17 @@ router.post('/', authMiddleware, createPost);
 router.delete('/:postId', authMiddleware, deletePost);
 // Like post
 router.post('/:postId/like', authMiddleware, likePost);
+// Unlike post
+router.post('/:postId/unlike', authMiddleware, unlikePost);
 // Comment on post
 router.post('/:postId/comment', authMiddleware, commentPost);
 // Save post
 router.post('/:postId/save', authMiddleware, savePost);
-// Get comments for a post
-router.get('/:postId/comments', authMiddleware, getComments);
+// Unsave post
+router.post('/:postId/unsave', authMiddleware, unsavePost);
+// Get comments for a post (public)
+router.get('/:postId/comments', getComments);
+// Get all saved posts for the signed-in user
+router.get('/saved', authMiddleware, getSavedPosts);
 
 module.exports = router;

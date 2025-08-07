@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Card } from '../ui/card';
 import { Button } from '../ui/button';
 import { 
@@ -8,71 +8,71 @@ import {
   Eye,
   Building
 } from 'lucide-react';
+import { useSuggestedUsers } from '@/hooks/profile/useSuggestedUsers';
+import { useNavigate } from 'react-router-dom';
 
 interface RightSideBarProps {
   onTopicClick?: (topic: string) => void;
 }
 
 function RightSideBar({ onTopicClick }: RightSideBarProps) {
+  const { users, loading, fetchSuggested } = useSuggestedUsers();
+  const navigate = useNavigate();
+  useEffect(() => { fetchSuggested(); }, []);
   return (
     <div className="lg:col-span-1">
-            <Card className="p-4 shadow-card bg-gradient-card">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold">People you may know</h4>
-                <Button variant="ghost" size="icon">
-                  <Plus className="w-4 h-4" />
-                </Button>
-              </div>
-              <div className="space-y-3">
-                <SuggestedConnection 
-                  name="Alice Cooper"
-                  title="Marketing Director"
-                  mutualConnections={5}
-                />
-                <SuggestedConnection 
-                  name="Bob Wilson"
-                  title="Data Scientist"
-                  mutualConnections={12}
-                />
-                <SuggestedConnection 
-                  name="Carol Davis"
-                  title="Product Designer"
-                  mutualConnections={3}
-                />
-              </div>
-            </Card>
+      <Card className="p-4 shadow-card bg-gradient-card">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="font-semibold">People you may know</h4>
+        </div>
+        <div className="space-y-3">
+          {loading && <div>Loading...</div>}
+          {users.map((user) => (
+            <SuggestedConnection
+              key={user.id}
+              id={user.id}
+              name={user.name}
+              header={user.header}
+              displayPic={user.displayPic}
+              onView={() => navigate(`/profile/${user.id}`)}
+            />
+          ))}
+          {users.length === 0 && !loading && <div className="text-muted-foreground">No suggestions</div>}
+        </div>
+      </Card>
 
-            {/* Trending */}
-            <Card className="p-4 mt-4 shadow-card bg-gradient-card">
-              <h4 className="font-semibold mb-4">Trending in Tech</h4>
-              <div className="space-y-3">
-                <TrendingTopic topic="Artificial Intelligence" onClick={onTopicClick} />
-                <TrendingTopic topic="Remote Work" onClick={onTopicClick} />
-                <TrendingTopic topic="Sustainability" onClick={onTopicClick} />
-                <TrendingTopic topic="Web3" onClick={onTopicClick} />
-              </div>
-            </Card>
-          </div>
+      {/* Trending */}
+      <Card className="p-4 mt-4 shadow-card bg-gradient-card">
+        <h4 className="font-semibold mb-4">Trending in Tech</h4>
+        <div className="space-y-3">
+          <TrendingTopic topic="Artificial Intelligence" onClick={onTopicClick} />
+          <TrendingTopic topic="Remote Work" onClick={onTopicClick} />
+          <TrendingTopic topic="Sustainability" onClick={onTopicClick} />
+          <TrendingTopic topic="Web3" onClick={onTopicClick} />
+        </div>
+      </Card>
+    </div>
   )
 }
 interface SuggestedConnectionProps {
+  id: string;
   name: string;
-  title: string;
-  mutualConnections: number;
+  header: string;
+  displayPic?: string;
+  onView: () => void;
 }
 
-const SuggestedConnection: React.FC<SuggestedConnectionProps> = ({ name, title, mutualConnections }) => (
+const SuggestedConnection: React.FC<SuggestedConnectionProps> = ({ name, header, displayPic, onView }) => (
   <div className="flex items-center space-x-3">
-    <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm">
-      {name.charAt(0)}
+    <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm overflow-hidden">
+      {displayPic ? <img src={displayPic} alt={name} className="w-full h-full object-cover rounded-full" /> : name.charAt(0)}
     </div>
     <div className="flex-1 min-w-0">
       <h5 className="font-medium text-sm truncate">{name}</h5>
-      <p className="text-xs text-muted-foreground truncate">{title}</p>
-      <p className="text-xs text-muted-foreground">{mutualConnections} mutual connections</p>
+      <p className="text-xs text-muted-foreground truncate">{header}</p>
     </div>
-    <Button variant="outline" size="sm" className="text-xs px-2 py-1 h-auto">
-      Connect
+    <Button variant="outline" size="sm" className="text-xs px-2 py-1 h-auto" onClick={onView}>
+      view
     </Button>
   </div>
 );

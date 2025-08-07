@@ -42,37 +42,52 @@ function LeftSideBar() {
                     <span className="text-muted-foreground">Profile views</span>
                     <span className="text-primary font-semibold">142</span>
                   </div> */}
-              <div className="flex justify-between text-sm mt-2">
-                <span className="text-muted-foreground">Connections</span>
-                <span className="text-primary font-semibold">
-                  {loading ? (
-                    <>
-                      <Loader2 className="animate-spin inline-block w-4 h-4 mr-1" />
-                    </>
-                  ) : userInfo ? (
-                    userInfo.numberOfConnections
-                  ) : (
-                    0
-                  )}
-                </span>
-              </div>
+              {loading ? (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground mt-2">
+                  <Loader2 className="animate-spin w-4 h-4" />
+                  <span>Loading connections...</span>
+                </div>
+              ) : userInfo ? (
+                <div className="flex items-center justify-between bg-muted px-4 py-2 rounded-md mt-2">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Connections
+                  </span>
+                  <span className="text-primary font-semibold text-sm">
+                    {userInfo.numberOfConnections || 0}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between bg-muted px-4 py-2 rounded-md mt-2">
+                  <span className="text-sm text-muted-foreground">
+                    No user data
+                  </span>
+                </div>
+              )}
             </div>
             <Button variant="outline" size="sm" className="w-full mt-4">
               {loading ? (
                 <Loader2 className="animate-spin inline-block w-4 h-4 mr-1" />
               ) : userInfo ? (
-                <Link className="display-block w-full h-full flex justify-center items-center" to={`/profile/${userInfo ? userInfo.id : ""}`}>
-                View Profile
-              </Link>
+                <Link
+                  className="display-block w-full h-full flex justify-center items-center"
+                  to={`/profile/${userInfo ? userInfo.id : ""}`}
+                >
+                  View Profile
+                </Link>
               ) : (
-                ""
+                <Link
+                  className="display-block w-full h-full flex justify-center items-center"
+                  to="/auth"
+                >
+                  Sign In
+                </Link>
               )}
             </Button>
           </div>
         </Card>
 
         {/* Quick Links */}
-        <Card className="p-4 mt-4 shadow-card bg-gradient-card">
+        {/* <Card className="p-4 mt-4 shadow-card bg-gradient-card">
           <h4 className="font-semibold mb-3">Quick Links</h4>
           <div className="space-y-2">
             <QuickLink icon={Users} label="My Network" count="12 new" />
@@ -80,7 +95,7 @@ function LeftSideBar() {
             <QuickLink icon={Building} label="Company Pages" />
             <QuickLink icon={Eye} label="Recent Activity" />
           </div>
-        </Card>
+        </Card> */}
       </div>
     </>
   );

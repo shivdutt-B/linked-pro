@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useEditAbout } from "@/hooks/profile/useEditAbout";
+import ConnectionButton from '@/components/connections/ConnectionButton';
 
 
 function ProfileHeader() {
@@ -91,6 +92,9 @@ function ProfileHeader() {
                 Edit profile
               </Button>
             )}
+            {!isOwner && userId && (
+              <ConnectionButton profileUserId={userId} />
+            )}
           </div>
 
           {/* Profile Details */}
@@ -111,7 +115,8 @@ function ProfileHeader() {
               <div className="flex items-center mt-2">
                 <Users className="h-4 w-4 mr-2" />
                 <span className="text-primary font-medium">
-                  {user ? user.connections.length:""} connections</span>
+                  {user && user.numberOfConnections ? user.numberOfConnections : 0} connections
+                </span>
               </div>
             </div>
           </div>
