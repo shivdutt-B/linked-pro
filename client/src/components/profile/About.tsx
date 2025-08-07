@@ -51,7 +51,7 @@ function About() {
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground leading-relaxed">
-          {user ? user.about : ""}
+          {user ? (typeof user.about === 'object' ? JSON.stringify(user.about) : String(user.about)) : ""}
         </p>
         {isEditing && isOwner && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">

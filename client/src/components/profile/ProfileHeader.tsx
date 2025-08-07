@@ -73,7 +73,8 @@ function ProfileHeader() {
             <Avatar className="h-32 w-32 border-4 border-background">
               <AvatarImage src="/lovable-uploads/279df4c1-4a67-48cb-88d2-ee7e85bce433.png" />
               <AvatarFallback className="text-2xl">
-                  {user ? user.name.slice(0,2) : ""}</AvatarFallback>
+                    {user ? (typeof user.name === 'object' ? JSON.stringify(user.name) : String(user.name?.slice(0,2))) : ""}
+                  </AvatarFallback>
             </Avatar>
             <Button
               variant="ghost"
@@ -101,21 +102,21 @@ function ProfileHeader() {
           <div className="mt-16 space-y-4">
             <div>
               <h1 className="text-3xl font-bold">{
-                user ? user.name : ""
-                }</h1>
+                user ? (typeof user.name === 'object' ? JSON.stringify(user.name) : user.name) : ""
+              }</h1>
               <p className="text-xl text-muted-foreground mt-1">
                 {
-                  user ? user.header : "--"
+                  user ? (typeof user.header === 'object' ? JSON.stringify(user.header) : user.header) : "--"
                 }
               </p>
               <div className="flex items-center text-muted-foreground mt-2">
                 <MapPin className="h-4 w-4 mr-1" />
-                <span>{user ? user.location : "--"}</span>
+                <span>{user ? (typeof user.location === 'object' ? JSON.stringify(user.location) : String(user.location)) : "--"}</span>
               </div>
               <div className="flex items-center mt-2">
                 <Users className="h-4 w-4 mr-2" />
                 <span className="text-primary font-medium">
-                  {user && user.numberOfConnections ? user.numberOfConnections : 0} connections
+                  {String(user && user.numberOfConnections ? user.numberOfConnections : 0)} connections
                 </span>
               </div>
             </div>

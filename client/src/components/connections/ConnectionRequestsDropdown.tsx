@@ -33,14 +33,14 @@ const ConnectionRequestsDropdown: React.FC = () => {
           <div className="flex items-center gap-2 cursor-pointer" onClick={() => req.from?.id && navigate(`/profile/${req.from.id}`)}>
             <Avatar className="w-8 h-8">
               {req.from?.displayPic ? (
-                <AvatarImage src={req.from.displayPic} alt={req.from.name || 'User'} />
+                <AvatarImage src={req.from.displayPic} alt={typeof req.from.name === 'object' ? JSON.stringify(req.from.name) : String(req.from.name || 'User')} />
               ) : (
-                <AvatarFallback>{req.from?.name?.charAt(0) || 'U'}</AvatarFallback>
+                <AvatarFallback>{typeof req.from?.name === 'object' ? JSON.stringify(req.from?.name) : String(req.from?.name?.charAt(0) || 'U')}</AvatarFallback>
               )}
             </Avatar>
             <div>
-              <div className="font-medium">{req.from?.name || 'User'}</div>
-              <div className="text-xs text-muted-foreground">{req.from?.email}</div>
+              <div className="font-medium">{typeof req.from?.name === 'object' ? JSON.stringify(req.from?.name) : String(req.from?.name || 'User')}</div>
+              <div className="text-xs text-muted-foreground">{typeof req.from?.email === 'object' ? JSON.stringify(req.from?.email) : String(req.from?.email)}</div>
             </div>
           </div>
           <div className="flex gap-1">

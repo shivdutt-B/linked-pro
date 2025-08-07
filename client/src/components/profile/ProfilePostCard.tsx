@@ -19,7 +19,7 @@ const ProfilePostCard: React.FC<ProfilePostCardProps> = ({ post, onDelete }) => 
     <Card className="p-4 border bg-background shadow-card hover:shadow-card-hover transition-smooth">
       <div className="flex justify-between items-start mb-2">
         <div>
-          <div className="font-semibold text-lg text-foreground mb-1">{post.user?.name || 'You'}</div>
+          <div className="font-semibold text-lg text-foreground mb-1">{typeof post.user?.name === 'object' ? JSON.stringify(post.user?.name) : String(post.user?.name || 'You')}</div>
           <div className="text-xs text-muted-foreground mb-1">{new Date(post.createdAt).toLocaleString()}</div>
         </div>
         {isOwner && (
@@ -42,15 +42,15 @@ const ProfilePostCard: React.FC<ProfilePostCardProps> = ({ post, onDelete }) => 
           </Dialog>
         )}
       </div>
-      <div className="mb-3 text-foreground text-base leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : post.content}</div>
+      <div className="mb-3 text-foreground text-base leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : String(post.content)}</div>
       <div className="flex items-center gap-6 text-sm text-muted-foreground border-t pt-2">
         <div className="flex items-center gap-1">
           <ThumbsUp className="w-4 h-4" />
-          <span>{post.likedBy?.length || 0} Likes</span>
+          <span>{String(post.likedBy?.length || 0)} Likes</span>
         </div>
         <div className="flex items-center gap-1">
           <MessageCircle className="w-4 h-4" />
-          <span>{post.comments?.length || 0} Comments</span>
+          <span>{String(post.comments?.length || 0)} Comments</span>
         </div>
       </div>
     </Card>

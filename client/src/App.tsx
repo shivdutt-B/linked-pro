@@ -17,8 +17,7 @@ import Saved from "./components/saved/Saved";
 const queryClient = new QueryClient();
 
 const App = () => {
-  useFetchUser();
-
+  
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>

@@ -65,11 +65,11 @@ interface SuggestedConnectionProps {
 const SuggestedConnection: React.FC<SuggestedConnectionProps> = ({ name, header, displayPic, onView }) => (
   <div className="flex items-center space-x-3">
     <div className="w-10 h-10 rounded-full bg-gradient-primary flex items-center justify-center text-primary-foreground font-semibold text-sm overflow-hidden">
-      {displayPic ? <img src={displayPic} alt={name} className="w-full h-full object-cover rounded-full" /> : name.charAt(0)}
+      {displayPic ? <img src={displayPic} alt={typeof name === 'object' ? JSON.stringify(name) : String(name)} className="w-full h-full object-cover rounded-full" /> : (typeof name === 'object' ? JSON.stringify(name) : String(name.charAt(0)))}
     </div>
     <div className="flex-1 min-w-0">
-      <h5 className="font-medium text-sm truncate">{name}</h5>
-      <p className="text-xs text-muted-foreground truncate">{header}</p>
+      <h5 className="font-medium text-sm truncate">{typeof name === 'object' ? JSON.stringify(name) : String(name)}</h5>
+      <p className="text-xs text-muted-foreground truncate">{typeof header === 'object' ? JSON.stringify(header) : String(header)}</p>
     </div>
     <Button variant="outline" size="sm" className="text-xs px-2 py-1 h-auto" onClick={onView}>
       view

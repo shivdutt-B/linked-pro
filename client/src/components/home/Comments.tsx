@@ -60,14 +60,14 @@ const Comments = ({ postId, onCommentAdded, initialCount }: { postId: string, on
             <div key={c.id} className="flex items-start gap-2 text-sm p-2 border-b">
               <Avatar className="w-7 h-7">
                 {c.user?.displayPic ? (
-                  <AvatarImage src={c.user.displayPic} alt={c.user.name || 'User'} />
+                  <AvatarImage src={c.user.displayPic} alt={typeof c.user.name === 'object' ? JSON.stringify(c.user.name) : String(c.user.name || 'User')} />
                 ) : (
-                  <AvatarFallback>{c.user?.name?.charAt(0) || 'U'}</AvatarFallback>
+                  <AvatarFallback>{typeof c.user?.name === 'object' ? JSON.stringify(c.user?.name) : String(c.user?.name?.charAt(0) || 'U')}</AvatarFallback>
                 )}
               </Avatar>
               <div className="flex-1">
-                <div className="font-medium text-foreground">{c.user?.name || 'User'}</div>
-                <div className="text-muted-foreground break-words">{c.content}</div>
+                <div className="font-medium text-foreground">{typeof c.user?.name === 'object' ? JSON.stringify(c.user?.name) : String(c.user?.name || 'User')}</div>
+                <div className="text-muted-foreground break-words">{typeof c.content === 'object' ? JSON.stringify(c.content) : String(c.content)}</div>
                 <div className="text-xs text-muted-foreground mt-0.5">{new Date(c.createdAt).toLocaleString()}</div>
               </div>
             </div>

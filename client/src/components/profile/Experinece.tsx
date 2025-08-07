@@ -73,12 +73,12 @@ function Experience() {
               <div className="flex items-start space-x-4">
                 <div className="w-12 h-12 bg-muted rounded flex items-center justify-center">
                   <span className="text-sm font-medium">
-                    {exp.org?.slice(0, 2).toUpperCase()}
+                    {typeof exp.org === 'object' ? JSON.stringify(exp.org) : String(exp.org?.slice(0, 2).toUpperCase())}
                   </span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-medium">{exp.title}</h3>
-                  <p className="text-muted-foreground">{exp.org}</p>
+                  <h3 className="font-medium">{typeof exp.title === 'object' ? JSON.stringify(exp.title) : String(exp.title)}</h3>
+                  <p className="text-muted-foreground">{typeof exp.org === 'object' ? JSON.stringify(exp.org) : String(exp.org)}</p>
                   <p className="text-sm text-muted-foreground">
                     {format(new Date(exp.fromDate), "yyyy-MM-dd")} - {exp.toDate ? format(new Date(exp.toDate), "yyyy-MM-dd") : "Present"}
                   </p>

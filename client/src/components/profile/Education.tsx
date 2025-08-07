@@ -70,10 +70,10 @@ export default function Education() {
             <div key={index} className="space-y-2">
               <div className="flex items-start space-x-4">
                 <div className="flex-1">
-                  <h3 className="font-medium">{edu.school}</h3>
-                  <p className="text-muted-foreground">{edu.title}</p>
-                  <p className="text-sm text-muted-foreground">
-                    Duration - {edu.year} years
+                  <h3 className="font-medium">{typeof edu.school === 'object' ? JSON.stringify(edu.school) : String(edu.school)}</h3>
+                  <p className="text-muted-foreground">{typeof edu.title === 'object' ? JSON.stringify(edu.title) : String(edu.title)}</p>
+                    <p className="text-sm text-muted-foreground">
+                    Duration - {String(edu.year)} years
                   </p>
                 </div>
                 {isOwner && (

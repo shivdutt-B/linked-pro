@@ -16,8 +16,11 @@ import ConnectionRequestsDropdown from '@/components/connections/ConnectionReque
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { useFetchUser } from '../../hooks/auth/useFetchUser';
 
 const Navigation = () => {
+  useFetchUser();
+
   const [showRequests, setShowRequests] = useState(false);
   const { requests, fetchRequests } = useFetchConnectionRequests();
   const navigate = useNavigate();

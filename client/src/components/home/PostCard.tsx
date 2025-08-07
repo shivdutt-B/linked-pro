@@ -82,9 +82,9 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
             </div>
             <div>
               <h3 className="font-semibold text-foreground hover:text-primary cursor-pointer transition-smooth" onClick={handleProfileClick}>
-                {post.user?.name || 'User'}
+                {typeof post.user?.name === 'object' ? JSON.stringify(post.user?.name) : String(post.user?.name || 'User')}
               </h3>
-              <p className="text-sm text-muted-foreground">{post.user?.header || ''}</p>
+              <p className="text-sm text-muted-foreground">{typeof post.user?.header === 'object' ? JSON.stringify(post.user?.header) : String(post.user?.header || '')}</p>
               <p className="text-xs text-muted-foreground">{new Date(post.createdAt).toLocaleString()}</p>
             </div>
           </div>
@@ -97,7 +97,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
       </div>
       {/* Post Content */}
       <div className="px-4 pb-3">
-        <p className="text-foreground leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : post.content}</p>
+        <p className="text-foreground leading-relaxed">{typeof post.content === 'object' ? JSON.stringify(post.content) : String(post.content)}</p>
       </div>
       {/* Engagement Stats */}
       <div className="px-4 py-2 border-t border-border">
@@ -111,11 +111,11 @@ const PostCard: React.FC<PostCardProps> = ({ post, onDelete }) => {
                 <Heart className="w-2 h-2 text-white" />
               </div>
             </div>
-            <span>{likeCount} reactions</span>
+            <span>{String(likeCount)} reactions</span>
           </div>
           <div className="flex items-center space-x-4">
-            <span>{commentCount} comments</span>
-            <span>{post.shares || 0} shares</span>
+            <span>{String(commentCount)} comments</span>
+            <span>{String(post.shares || 0)} shares</span>
           </div>
         </div>
       </div>

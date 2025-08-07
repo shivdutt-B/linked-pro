@@ -10,8 +10,12 @@ const postRoutes = require('./src/routes/post/post.routes');
 const connectionsRoutes = require('./src/routes/connections/connections.routes');
 // Load environment variables
 dotenv.config();
+const heimdall = require('heimdall-nodejs-sdk');
 
 const app = express();
+
+// Initialize Heimdall SDK
+heimdall.ping(app);
 
 // Middleware
 app.use(cors());
